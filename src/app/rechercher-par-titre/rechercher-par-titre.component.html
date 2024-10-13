@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="card shadow mb-4">
+    <div class="card-body">
+
+<form class="form-inline">
+<div class="form-group mx-sm-3 mb-2 mt-2 ">
+<label>Titre Chanson en tapant</label>
+<input #titre [(ngModel)]="searchTerm" name="searchTerm" class="form-control">
+</div>
+</form>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th colspan="3">Liste de Chansons</th>
+          </tr>
+          <tr>
+            <th>id</th>
+            <th>titre</th>
+            <th>Durée</th>
+            <th>Album</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+       <tbody *ngFor="let chanson of chansons| searchFilter: searchTerm ">
+          <tr>
+            <td>{{chanson.idChanson}}</td>
+            <td>{{chanson.titreChanson}}</td>
+            <td>{{chanson.dureeChanson}}</td>
+               <td>{{chanson.album?.titreAlbum}}</td>
+           
+          </tr>
+        </tbody>
+      </table> 
+    </div>
+  </div>
+</div>

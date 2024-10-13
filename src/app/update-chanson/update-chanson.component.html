@@ -1,0 +1,37 @@
+<div class="container">
+  <div>
+    <h2>Modifier une Chanson :</h2>
+  </div>
+  <form>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+      <label>ID Chanson</label>
+      <input readonly type="text" [(ngModel)]="currentChanson.idChanson" 
+      name="idChanson" class="form-control">
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Titre Chanson</label>
+      <input type="text" [(ngModel)]="currentChanson.titreChanson" 
+      name="titreChanson" class="form-control">
+    </div>
+
+    <div class="col-sm-2 col-md-2 col-lg-2">
+      <label>Durée Chanson (en secondes)</label>
+      <input type="number" [(ngModel)]="currentChanson.dureeChanson" 
+      name="dureeChanson" class="form-control">
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+<select class="form-control form-control-lg" id="idAlbum" name="idAlbum"
+[(ngModel)]="updatedAlbumId">
+<option *ngFor="let Album of albums" [value]="Album.idAlbum" >
+{{Album.titreAlbum}}
+</option>
+</select>
+</div>
+
+    <div class="mt-2">
+      <button type="submit" (click)="updateChanson()" class="btn btn-success">Modifier</button>
+    </div>
+  </form>
+</div>

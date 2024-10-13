@@ -1,0 +1,1 @@
+export const  apiURL: string = 'http://localhost:9090/chansons/api';
