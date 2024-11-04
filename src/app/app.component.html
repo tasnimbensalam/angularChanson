@@ -15,7 +15,7 @@
                     Chanson
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" *ngIf="authService.isAdmin()" href="/add-chanson">Ajouter</a>
+                    <a class="dropdown-item" *ngIf="authService.isAdmin()" routerLink="/add-chanson">Ajouter</a>
                     <a class="dropdown-item" href="#">Lister</a>
                     <a class="dropdown-item" routerLink="/rechercherParAlbum" >Recherche Par Album</a>
                     <a class="dropdown-item" routerLink="/rechercheParTitre" >Recherche Par Titre</a>
@@ -31,8 +31,8 @@
                     Connexion
                 </a>
                 <div class="dropdown-menu">
-                    <a *ngIf="!authService.isloggedIn" class="dropdown-item" href="#">login</a>
-                    <a *ngIf="!authService.isloggedIn" class="dropdown-item" href="#">logout</a>
+                    <a *ngIf="!authService.isloggedIn" class="dropdown-item" routerLink = "login">login</a>
+                    <a *ngIf="authService.isloggedIn" class="dropdown-item" (click) = "onLogout()" >logout</a>
                     <a class="dropdown-item" href="#">Profile</a>
                 </div>
             </li>

@@ -8,7 +8,7 @@ import { ChansonsComponent } from './chansons/chansons.component';
 import { AddChansonComponent } from './add-chanson/add-chanson.component';
 import { FormsModule } from '@angular/forms';
 import { UpdateChansonComponent } from './update-chanson/update-chanson.component';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { RechercherParAlbumComponent } from './rechercher-par-album/rechercher-par-album.component';
 import { RechercherParTitreComponent } from './rechercher-par-titre/rechercher-par-titre.component';
 import { SearchFilterPipe } from './search-filter.pipe';
@@ -16,6 +16,8 @@ import { ListeAlbumsComponent } from './liste-albums/liste-albums.component';
 import { UpdateAlbumsComponent } from './update-albums/update-albums.component';
 import { LoginComponent } from './login/login.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './services/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -39,8 +41,14 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     HttpClientModule, 
 
   ],
-  providers: [[provideHttpClient()],
-    provideClientHydration()
+  providers: [
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

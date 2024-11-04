@@ -1,16 +1,19 @@
-import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { AuthService } from './services/auth.service';
 
+@Injectable({
+  providedIn: 'root',
+})
+export class chansonGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {}
 
-export const chansonGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-
-  if (authService.isAdmin()) {
-    return true;
-  } else {
-    router.navigate(['app-forbidden']);
-    return false;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.isAdmin()) {
+      return true;
+    } else {
+      this.router.navigate(['app-forbidden']);
+      return false;
+    }
   }
-};
+}

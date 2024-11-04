@@ -5,120 +5,93 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { apiURL } from '../config';
 import { AlbumWrapper } from '../model/AlbumWrapped';
-
+import { AuthService } from './auth.service';
 
 const httpOptions = {
- 
-  headers: new HttpHeaders( {'Content-Type': 'application/json'} )
-  };
-  
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChansonService {
- 
+  apiURL: string = 'http://localhost:9090/chansons/api';
   apiURLAlb: string = 'http://localhost:9090/chansons/album';
-  chansons! : Chanson[]; 
+  chansons!: Chanson[];
   albums!: Album[];
-  constructor(private http : HttpClient) {  
-   /* this.albums = [ {idAlbum : 1, nomAlbum : "nom",proprietaireAlbum:"hey"},
-      {idAlbum : 2, nomAlbum : "Imprimante",proprietaireAlbum:"hey"}]; 
-     this.chansons = [
-    {
-      idChanson: 1, 
-      nomChanson: "Song 1", 
-      dureChanson: 300, 
-      album:{idAlbum:11,nomAlbum:"hey",proprietaireAlbum:"emily"}
-     
-    },
-    {
-      idChanson: 2, 
-      nomChanson: "Song 2", 
-      dureChanson: 450, 
-      album:{idAlbum:11,nomAlbum:"hey",proprietaireAlbum:"emily"}
-      
-    },
-    {
-      idChanson: 3, 
-      nomChanson: "Song 3", 
-      dureChanson: 210, 
-      album:{idAlbum:11,nomAlbum:"hey",proprietaireAlbum:"emily"}
-    
-    }
-  ];*/
-  }
 
-  listeChansons():Observable<Chanson[]> {
-    return this.http.get<Chanson[]>(apiURL);
-  }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-
-
-  /*ajouterChanson( chans: Chanson){
-  this.chansons.push(chans);
-  }*/
-  ajouterChanson( chans: Chanson):Observable<Chanson>{
-    return this.http.post<Chanson>(apiURL, chans, httpOptions);
-    }
-    
-  supprimerChanson(id:number){
-   /* let conf = confirm("Etes-vous sûr ?");
-    if (conf) {
-      const index = this.chansons.indexOf(chans, 0);
-      if (index > -1) {
-        this.chansons.splice(index, 1);
-      }
-    }*/
-      const url = `${apiURL}/${id}`;
-      return this.http.delete(url, httpOptions);
-  }
+  listeChansons(): Observable<Chanson[]> {
   
-  chanson! : Chanson;
+    return this.http.get<Chanson[]>(this.apiURL + "/all");
+  }
+
+  ajouterChanson(chans: Chanson): Observable<Chanson> {
+    let jwt = this.authService.getToken();
+    jwt = "Bearer " + jwt;
+    let httpHeaders = new HttpHeaders({ "Authorization": jwt });
+    return this.http.post<Chanson>(this.apiURL + "/addchan", chans, { headers: httpHeaders });
+  }
+
+  supprimerChanson(id: number) {
+    const url = `${this.apiURL}/delchan/${id}`;
+    let jwt = this.authService.getToken();
+    jwt = "Bearer " + jwt;
+    let httpHeaders = new HttpHeaders({ "Authorization": jwt });
+    return this.http.delete(url, { headers: httpHeaders });
+  }
+
   consulterChanson(id: number): Observable<Chanson> {
-    const url = `${apiURL}/${id}`;
-    return this.http.get<Chanson>(url);
-    }
-    
-trierChansons(){
-  this.chansons = this.chansons.sort((n1,n2) => {
-  if (n1.idChanson! > n2.idChanson!) {
-  return 1;
-  }
-  if (n1.idChanson! < n2.idChanson!) {
-  return -1;
-  }
-  return 0;
-  });
-  }
-  
-updateChanson(c: Chanson) {
- 
-/*  this.supprimerChanson(c);
-  this.ajouterChanson(c);
-  this.trierChansons();*/
-  return this.http.put<Chanson>(apiURL, c, httpOptions);
-
-}
-listeAlbums():Observable<AlbumWrapper>{
-  return this.http.get<AlbumWrapper>(this.apiURLAlb);
-  }
-  consulterAlbum(id:number): Album{
-  return this.albums.find((album: { idAlbum: number; }) => album.idAlbum == id)!;
+    const url = `${this.apiURL}/getbyid/${id}`;
+    let jwt = this.authService.getToken();
+    jwt = "Bearer " + jwt;
+    let httpHeaders = new HttpHeaders({ "Authorization": jwt });
+    return this.http.get<Chanson>(url, { headers: httpHeaders });
   }
 
-  rechercherParAlbum(idAlbum: number):Observable< Chanson[]> {
-    const url = `${apiURL}/chansalbu/${idAlbum}`;
-    return this.http.get<Chanson[]>(url);
-    }
-
-    rechercherParTitre(titre: string):Observable< Chanson[]> {
-      const url = `${apiURL}/chansByName/${titre}`;
-      return this.http.get<Chanson[]>(url);
+  trierChansons() {
+    this.chansons = this.chansons.sort((n1, n2) => {
+      if (n1.idChanson! > n2.idChanson!) {
+        return 1;
       }
+      if (n1.idChanson! < n2.idChanson!) {
+        return -1;
+      }
+      return 0;
+    });
+  }
 
-      ajouterAlbum( alb: Album):Observable<Album>{
-        return this.http.post<Album>(this.apiURLAlb, alb, httpOptions);
-        }
+  updateChanson(c: Chanson): Observable<Chanson> {
+    let jwt = this.authService.getToken();
+    jwt = "Bearer " + jwt;
+    let httpHeaders = new HttpHeaders({ "Authorization": jwt });
+    return this.http.put<Chanson>(this.apiURL + "/updatechan", c, { headers: httpHeaders });
+  }
 
-}  
+  listeAlbums(): Observable<AlbumWrapper> {
+ 
+      let jwt = this.authService.getToken();
+      jwt = "Bearer "+jwt;
+      let httpHeaders = new HttpHeaders({"Authorization":jwt})
+    return this.http.get<AlbumWrapper>(this.apiURLAlb,{headers:httpHeaders});
+  }
+
+  consulterAlbum(id: number): Album {
+    return this.albums.find((album: { idAlbum: number; }) => album.idAlbum == id)!;
+  }
+
+  rechercherParAlbum(idAlbum: number): Observable<Chanson[]> {
+    const url = `${this.apiURL}/chansalbu/${idAlbum}`;
+    return this.http.get<Chanson[]>(url);
+  }
+
+  rechercherParTitre(titre: string): Observable<Chanson[]> {
+    const url = `${this.apiURL}/chansByName/${titre}`;
+    return this.http.get<Chanson[]>(url);
+  }
+
+  ajouterAlbum(alb: Album): Observable<Album> {
+    return this.http.post<Album>(this.apiURLAlb, alb, httpOptions);
+  }
+}
