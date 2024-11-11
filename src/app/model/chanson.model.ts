@@ -7,5 +7,5 @@ export class Chanson {
     dureeChanson? :number;
     album! :Album
     image! : Image
-imageStr!:string
+    imageStr!:string
 }

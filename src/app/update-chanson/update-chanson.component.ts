@@ -31,7 +31,7 @@ console.log(cats);
  subscribe( chan =>{ this.currentChanson = chan;
   this.updatedAlbumId=this.currentChanson.album.idAlbum;
   this.chansonService.loadImage(this.currentChanson.image.idImage).subscribe((img: Image) => {
-    this.myImage = 'data:' + img.type + ';base64,' + img.image;  // Set the image to be displayed
+    this.myImage = 'data:' + img.type + ';base64,' + img.image; 
   });
 });
 

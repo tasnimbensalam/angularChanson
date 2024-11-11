@@ -2,6 +2,7 @@ import { AuthService } from './../services/auth.service';
 import { Component } from '@angular/core';
 import { Chanson } from '../model/chanson.model';
 import { ChansonService } from '../services/chanson.service';
+import { Image } from '../model/image.model';
 
 @Component({
   selector: 'app-chansons',
@@ -27,8 +28,19 @@ export class ChansonsComponent {
           this.chansonService.listeChansons().subscribe(chans => {
           console.log(chans);
           this.chansons = chans;
-          });
+          this.chansons.forEach((chan) => {
+            this.chansonService
+            .loadImage(chan.image.idImage)
+            .subscribe((img: Image) => {
+              chan.imageStr = 'data:' + img.type + ';base64,' + img.image;
+            
+            });
+            });
+            });
+        
           }
+    
+            
 supprimerChanson(chans: Chanson): void {
   let conf = confirm("Etes-vous sûr ?");
   if (conf && chans.idChanson !== undefined) {

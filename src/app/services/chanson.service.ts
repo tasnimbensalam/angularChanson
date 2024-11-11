@@ -1,3 +1,4 @@
+import { Image } from './../model/image.model';
 import { Injectable } from '@angular/core';
 import { Chanson } from '../model/chanson.model';
 import { Album } from '../model/album.model';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { apiURL } from '../config';
 import { AlbumWrapper } from '../model/AlbumWrapped';
 import { AuthService } from './auth.service';
-import { Image } from '../model/image.model';
+
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,6 +21,7 @@ export class ChansonService {
   apiURLAlb: string = 'http://localhost:9090/chansons/album';
   chansons!: Chanson[];
   albums!: Album[];
+ 
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -96,19 +98,16 @@ export class ChansonService {
     return this.http.post<Album>(this.apiURLAlb, alb, httpOptions);
   }
 
- 
   uploadImage(file: File, filename: string): Observable<Image>{
     const imageFormData = new FormData();
     imageFormData.append('image', file, filename);
     const url = `${apiURL + '/image/upload'}`;
     return this.http.post<Image>(url, imageFormData);
     }
-
-
     loadImage(id: number): Observable<Image> {
-      const url = `${apiURL + '/image/get/info'}/${id}`;
-      return this.http.get<Image>(url);
-      }
+    const url = `${this.apiURL + '/image/get/info'}/${id}`;
+    return this.http.get<Image>(url);
+    }
 
 
       uploadImageChanson(file: File, filename: string, idChanson:number): Observable<any>{
