@@ -4,11 +4,12 @@
 <div class="row justify-content-md-center">
 <div class="col-md-4">
 <div class="alert alert-danger" *ngIf="err==1">
-<strong>login ou mot de passe erronés..</strong>
+<strong>{{message}}</strong>
 </div>
 
 <form >
 <div class="form-group">
+
 <label >Nom Utilisateur :</label>
 <input type="text" name="username"
 class="form-control"
@@ -22,6 +23,7 @@ class="form-control"
 <div class="row justify-content-md-center">
 <button type="button" (click)="onLoggedin()"
 class="btn btn-success">Connexion</button>
+<p>Vous n'avez pas un compte? <a routerLink="/register">S'inscrire </a></p>
 </div>
 </form>
 </div>

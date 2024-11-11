@@ -8,6 +8,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
+  setRegisterdUser(user: User) {
+    throw new Error('Method not implemented.');
+  }
 /*  users: User[] = [{"username":"admin","password":"123","roles":['ADMIN']},
   {"username":"tesnim","password":"123","roles":['USER']} ];*/
   public loggedUser!:string;
@@ -15,7 +18,7 @@ export class AuthService {
   public roles!:string[];
   apiURL: string = 'http://localhost:8000/users';
   token!:string;
-  
+  public regitredUser : User = new User();
  private helper = new JwtHelperService();
 
   constructor(private router: Router,
@@ -92,5 +95,17 @@ this.loggedUser = decodedToken.sub;
   {
     return  this.helper.isTokenExpired(this.token);   
   }
-
+  registerUser(user :User){
+    return this.http.post<User>(this.apiURL+'/register', user,
+    {observe:'response'});
     }
+ setRegistredUser(user : User){
+      this.regitredUser=user;
+      }
+  getRegistredUser(){
+      return this.regitredUser;
+      }
+  validateEmail(code : string){
+        return this.http.get<User>(this.apiURL+'/verifyEmail/'+code);
+        }
+     }

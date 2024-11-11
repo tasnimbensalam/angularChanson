@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BindingComponent } from './binding/binding.component';
 import { ChansonsComponent } from './chansons/chansons.component';
 import { AddChansonComponent } from './add-chanson/add-chanson.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateChansonComponent } from './update-chanson/update-chanson.component';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { RechercherParAlbumComponent } from './rechercher-par-album/rechercher-par-album.component';
@@ -18,6 +18,10 @@ import { LoginComponent } from './login/login.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
+import { RegisterComponent } from './register/register.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VerifEmailComponent } from './verif-email/verif-email.component';
 
 @NgModule({
   declarations: [
@@ -29,16 +33,25 @@ import { TokenInterceptor } from './services/token.interceptor';
     RechercherParAlbumComponent,
     RechercherParTitreComponent,
     SearchFilterPipe,
+
     ListeAlbumsComponent,
     UpdateAlbumsComponent,
     LoginComponent,
     ForbiddenComponent,
+    RegisterComponent,
+    VerifEmailComponent
+
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule, 
+    HttpClientModule,
+    BrowserAnimationsModule,
+  
+    ToastrModule.forRoot(),
+
 
   ],
   providers: [

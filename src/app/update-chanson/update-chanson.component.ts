@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChansonService } from '../services/chanson.service';
 import { Chanson } from '../model/chanson.model';
 import { Album } from '../model/album.model';
+import { Image } from '../model/image.model';
 @Component({
   selector: 'app-update-chanson',
   templateUrl: './update-chanson.component.html',
@@ -10,6 +11,7 @@ import { Album } from '../model/album.model';
 })
 export class UpdateChansonComponent implements OnInit  {
   albums! : Album[];
+  myImage! : string;
   updatedAlbumId! :number;
   currentChanson = new Chanson();
   constructor(private activatedRoute: ActivatedRoute,private router :Router,
@@ -28,8 +30,12 @@ console.log(cats);
     this.chansonService.consulterChanson(this.activatedRoute.snapshot.params['id']).
  subscribe( chan =>{ this.currentChanson = chan;
   this.updatedAlbumId=this.currentChanson.album.idAlbum;
+  this.chansonService.loadImage(this.currentChanson.image.idImage).subscribe((img: Image) => {
+    this.myImage = 'data:' + img.type + ';base64,' + img.image;  // Set the image to be displayed
+  });
+});
 
-  } ) ;
+   
     }
 
 

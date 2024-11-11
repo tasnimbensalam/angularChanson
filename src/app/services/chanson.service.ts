@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { apiURL } from '../config';
 import { AlbumWrapper } from '../model/AlbumWrapped';
 import { AuthService } from './auth.service';
+import { Image } from '../model/image.model';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -94,4 +95,41 @@ export class ChansonService {
   ajouterAlbum(alb: Album): Observable<Album> {
     return this.http.post<Album>(this.apiURLAlb, alb, httpOptions);
   }
+
+ 
+  uploadImage(file: File, filename: string): Observable<Image>{
+    const imageFormData = new FormData();
+    imageFormData.append('image', file, filename);
+    const url = `${apiURL + '/image/upload'}`;
+    return this.http.post<Image>(url, imageFormData);
+    }
+
+
+    loadImage(id: number): Observable<Image> {
+      const url = `${apiURL + '/image/get/info'}/${id}`;
+      return this.http.get<Image>(url);
+      }
+
+
+      uploadImageChanson(file: File, filename: string, idChanson:number): Observable<any>{
+        const imageFormData = new FormData();
+        imageFormData.append('image', file, filename);
+        const url = `${apiURL + '/image/uplaodImageChanson'}/${idChanson}`;
+        return this.http.post(url, imageFormData);
+     }
+        
+     supprimerImage(id : number) {
+      const url = `${apiURL}/image/delete/${id}`;
+      return this.http.delete(url, httpOptions);
+      }
+      
+
+      uploadImageFS(file: File, filename: string, idChanson : number): Observable<any>{
+        const imageFormData = new FormData();
+        imageFormData.append('image', file, filename);
+        const url = `${apiURL + '/image/uploadFS'}/${idChanson}`;
+        return this.http.post(url, imageFormData);
+      }
+
+     
 }

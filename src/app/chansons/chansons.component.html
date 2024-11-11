@@ -11,7 +11,7 @@
             <th>Nom</th>
             <th>Durée</th>
             <th>Album</th>
-            <th>Actions</th>
+            <th *ngIf="authService.isAdmin()">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -21,6 +21,7 @@
             <td>{{chanson.dureeChanson}}</td>
                <td>{{chanson.album?.titreAlbum}}</td>
             <td>
+
               <a *ngIf="authService.isAdmin()" class="btn btn-success" [routerLink]="['/updateChanson', chanson.idChanson]">Modifier</a>
               <a *ngIf="authService.isAdmin()" class="btn btn-danger" (click)="supprimerChanson(chanson)">Supprimer</a>
             </td>

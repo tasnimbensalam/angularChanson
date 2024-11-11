@@ -1,54 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chanson } from '../model/chanson.model';
 import { ChansonService } from '../services/chanson.service';
 import { Album } from '../model/album.model';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
+import { Image } from '../model/image.model';
 
 @Component({
   selector: 'app-add-chanson',
   templateUrl: './add-chanson.component.html',
   styleUrls: ['./add-chanson.component.css'] 
 })
-
-export class AddChansonComponent {
+export class AddChansonComponent implements OnInit {
   albums!: Album[];       
   newIdAlbum!: number;  
-  newAlbum!: Album;        
-  newChanson: Chanson = { 
-    idChanson: 0,
-   titreChanson: '',
-    dureeChanson: 0,
-    album: {
-      idAlbum: 0,
-      titreAlbum: '',
-      proprietaireAlbum: ''
-    }
-  };
+  newAlbum!: Album; 
+  uploadedImage!: File;
+  imagePath: any;  
+  idChanson!: number;
+  newChanson = new Chanson();
 
-  constructor(private chansonService: ChansonService, private router: Router) { }
+  constructor(
+    private chansonService: ChansonService, 
+    private router: Router
+  ) { }
+
   ngOnInit() {
-   // this.albums = this.chansonService.listeAlbums();
-    this.chansonService.listeAlbums().
-    subscribe(cats => {this.albums = cats._embedded.albums;
-    console.log(cats);
-});
-
-    }
-    
- /* addChanson() {
-  
-    this.newAlbum = this.chansonService.consulterAlbum(this.newIdAlbum);
-    this.newChanson.album = this.newAlbum;
-    this.chansonService.ajouterChanson(this.newChanson);
-
-    this.router.navigate(['chansons']);
-  }*/
-    addChanson(){
-      this.newChanson.album = this.albums.find(cat => cat.idAlbum == this.newIdAlbum)!;
-      this.chansonService.ajouterChanson(this.newChanson)
-      .subscribe(chans => {
-      console.log(chans);
-      this.router.navigate(['chansons']);
-      });
+    this.chansonService.listeAlbums().subscribe(
+      albs => {
+        this.albums = albs._embedded.albums;
+        console.log(albs);
+      },
+      error => {
+        console.error('Error loading albums:', error);
       }
+    );
+  }
+
+  addChanson(){
+    this.chansonService
+    .uploadImage(this.uploadedImage, this.uploadedImage.name)
+    .subscribe((img: Image) => {
+    this.newChanson.image=img;
+    this.newChanson.album = this.albums.find(cat => cat.idAlbum
+    == this.newIdAlbum)!;
+    this.chansonService
+    .ajouterChanson(this.newChanson)
+    .subscribe(() => {
+    this.router.navigate(['chansons']);
+    });
+    });
+    }
+
+  
+  onImageUpload(event: any) {
+    this.uploadedImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(this.uploadedImage);
+    reader.onload = (_event) => { this.imagePath = reader.result; }
+    }
+  
 }
