@@ -8,4 +8,5 @@ export class Chanson {
     album! :Album
     image! : Image
     imageStr!:string
+    images!: Image[]
 }

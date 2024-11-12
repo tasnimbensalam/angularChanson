@@ -109,18 +109,16 @@ export class ChansonService {
     return this.http.get<Image>(url);
     }
 
-
-      uploadImageChanson(file: File, filename: string, idChanson:number): Observable<any>{
-        const imageFormData = new FormData();
-        imageFormData.append('image', file, filename);
-        const url = `${apiURL + '/image/uplaodImageChanson'}/${idChanson}`;
-        return this.http.post(url, imageFormData);
-     }
-        
-     supprimerImage(id : number) {
-      const url = `${apiURL}/image/delete/${id}`;
-      return this.http.delete(url, httpOptions);
-      }
+     uploadImageChanson(file: File, filename: string, idProd:number): Observable<any>{
+      const imageFormData = new FormData();
+      imageFormData.append('image', file, filename);
+      const url = `${this.apiURL + '/image/uploadImageChan'}/${idProd}`;
+      return this.http.post(url, imageFormData);
+      } 
+      supprimerImage(id : number) {
+        const url = `${this.apiURL}/image/delete/${id}`;
+        return this.http.delete(url, httpOptions);
+        }
       
 
       uploadImageFS(file: File, filename: string, idChanson : number): Observable<any>{
