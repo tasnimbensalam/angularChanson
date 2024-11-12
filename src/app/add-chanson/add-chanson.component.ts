@@ -36,21 +36,21 @@ export class AddChansonComponent implements OnInit {
     );
   }
 
-  addChanson(){
-    this.chansonService
-    .uploadImage(this.uploadedImage, this.uploadedImage.name)
-    .subscribe((img: Image) => {
-    this.newChanson.image=img;
-    this.newChanson.album = this.albums.find(cat => cat.idAlbum
-    == this.newIdAlbum)!;
-    this.chansonService
-    .ajouterChanson(this.newChanson)
-    .subscribe(() => {
-    this.router.navigate(['chansons']);
-    });
-    });
-    }
 
+    addChanson(){
+      this.newChanson.album = this.albums.find(cat => cat.idAlbum
+      == this.newIdAlbum)!;
+      this.chansonService
+      .ajouterChanson(this.newChanson)
+      .subscribe((prod) => {
+      this.chansonService
+      .uploadImageFS(this.uploadedImage,
+      this.uploadedImage.name,prod.idChanson!)
+      .subscribe((response: any) => {}
+      );
+      this.router.navigate(['chansons']);
+      });
+      }
   
   onImageUpload(event: any) {
     this.uploadedImage = event.target.files[0];

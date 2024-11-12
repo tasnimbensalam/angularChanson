@@ -42,8 +42,8 @@ ngOnInit(): void {
   subscribe(cats => {this.albums = cats._embedded.albums;
   });
   this.chansonService.consulterChanson(this.activatedRoute.snapshot.params['id'])
-  .subscribe( prod =>{ this.currentChanson = prod;
-  this.updatedAlbumId = prod.album.idAlbum;
+  .subscribe( chan =>{ this.currentChanson = chan;
+  this.updatedAlbumId = chan.album.idAlbum;
   } ) ;
   }
     
@@ -99,13 +99,21 @@ ngOnInit(): void {
       }
       }
 
-      onAddImageChanson(){
-        this.chansonService
-        .uploadImageChanson(this.uploadedImage,this.uploadedImage.name,this.currentChanson.idChanson!)
-            .subscribe( (img : Image) => {
-                  this.currentChanson.images.push(img);
-               });
-      }
+      onAddImageChanson() {
+        console.log("Current Chanson ID:", this.currentChanson?.idChanson);
+
+        if (this.currentChanson?.idChanson !== undefined) {
+            this.chansonService
+                .uploadImageChanson(this.uploadedImage, this.uploadedImage.name, this.currentChanson.idChanson)
+                .subscribe((img: Image) => {
+                    this.currentChanson.images.push(img);
+                });
+              
+        } else {
+            console.error("currentChanson or idChanson is undefined");
+        }
+    }
+    
         supprimerImage(img: Image){
           let conf = confirm("Etes-vous sûr ?");
           if (conf)

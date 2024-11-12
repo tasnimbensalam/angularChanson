@@ -110,6 +110,7 @@ export class ChansonService {
     }
 
      uploadImageChanson(file: File, filename: string, idChan:number): Observable<any>{
+      
       const imageFormData = new FormData();
       imageFormData.append('image', file, filename);
       const url = `${this.apiURL + '/image/uploadImageChan'}/${idChan}`;
