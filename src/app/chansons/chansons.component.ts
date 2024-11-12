@@ -24,22 +24,7 @@ export class ChansonsComponent {
         this.chansons = chans;
         });
         }
-        chargerChansons(){
-          this.chansonService.listeChansons().subscribe(chans => {
-          console.log(chans);
-          this.chansons = chans;
-          this.chansons.forEach((chan) => {
-            this.chansonService
-            .loadImage(chan.image.idImage)
-            .subscribe((img: Image) => {
-              chan.imageStr = 'data:' + img.type + ';base64,' + img.image;
-            
-            });
-            });
-            });
-        
-          }
-    
+     
             
 supprimerChanson(chans: Chanson): void {
   let conf = confirm("Etes-vous sûr ?");
@@ -52,6 +37,12 @@ supprimerChanson(chans: Chanson): void {
     console.error('idChanson is undefined or null');
   }
 }
-
+chargerChansons(){
+  this.chansonService.listeChansons().subscribe(prods=> {
+  this.chansons=  prods  ;
+  this.chansons.forEach(( prod ) => {
+     prod.imageStr = 'data:' +  prod.images[0].type + ';base64,' +  prod.images[0].image;
+    });
+  });      }
 }
 
