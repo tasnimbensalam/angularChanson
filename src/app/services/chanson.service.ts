@@ -109,10 +109,10 @@ export class ChansonService {
     return this.http.get<Image>(url);
     }
 
-     uploadImageChanson(file: File, filename: string, idProd:number): Observable<any>{
+     uploadImageChanson(file: File, filename: string, idChan:number): Observable<any>{
       const imageFormData = new FormData();
       imageFormData.append('image', file, filename);
-      const url = `${this.apiURL + '/image/uploadImageChan'}/${idProd}`;
+      const url = `${this.apiURL + '/image/uploadImageChan'}/${idChan}`;
       return this.http.post(url, imageFormData);
       } 
       supprimerImage(id : number) {

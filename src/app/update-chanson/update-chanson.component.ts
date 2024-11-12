@@ -98,21 +98,14 @@ ngOnInit(): void {
       reader.onload = () => { this.myImage = reader.result as string; };
       }
       }
-      onAddImageChanson() {
-        if (this.currentChanson.idChanson) {  // Check if idChanson is defined
-          this.chansonService
-            .uploadImageChanson(this.uploadedImage, this.uploadedImage.name, this.currentChanson.idChanson)
-            .subscribe((img: Image) => {
-              if (!this.currentChanson.images) {
-                this.currentChanson.images = [];  // Initialize images array if it’s undefined
-              }
-              this.currentChanson.images.push(img);
-            });
-        } else {
-          console.error("Current chanson ID is undefined. Cannot upload image.");
-        }
+
+      onAddImageChanson(){
+        this.chansonService
+        .uploadImageChanson(this.uploadedImage,this.uploadedImage.name,this.currentChanson.idChanson!)
+            .subscribe( (img : Image) => {
+                  this.currentChanson.images.push(img);
+               });
       }
-      
         supprimerImage(img: Image){
           let conf = confirm("Etes-vous sûr ?");
           if (conf)
