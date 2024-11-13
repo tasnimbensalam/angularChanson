@@ -1,45 +1,48 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BindingComponent } from './binding/binding.component';
 import { ChansonsComponent } from './chansons/chansons.component';
-import { AddChansonComponent } from './add-chanson/add-chanson.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UpdateChansonComponent } from './update-chanson/update-chanson.component';
+
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { RechercherParAlbumComponent } from './rechercher-par-album/rechercher-par-album.component';
-import { RechercherParTitreComponent } from './rechercher-par-titre/rechercher-par-titre.component';
-import { SearchFilterPipe } from './search-filter.pipe';
-import { ListeAlbumsComponent } from './liste-albums/liste-albums.component';
-import { UpdateAlbumsComponent } from './update-albums/update-albums.component';
-import { LoginComponent } from './login/login.component';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './services/token.interceptor';
-import { RegisterComponent } from './register/register.component';
+
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+
+
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { VerifEmailComponent } from './verif-email/verif-email.component';
 
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+  keycloak.init({
+  config: {
+  url: 'http://localhost:8080',
+  realm: 'tesnim-realm',
+  clientId: 'chanson-app'
+  },
+  initOptions: {
+  /*onLoad :'login-required',
+  checkLoginIframe: true*/
+  onLoad: 'check-sso',
+
+  silentCheckSsoRedirectUri:
+  window.location.origin + '/assets/silent-check-sso.html' 
+  }
+  });
+}
 @NgModule({
   declarations: [
     AppComponent,
-    BindingComponent,
+  
     ChansonsComponent,
-    AddChansonComponent,
-    UpdateChansonComponent,
-    RechercherParAlbumComponent,
-    RechercherParTitreComponent,
-    SearchFilterPipe,
+  
 
-    ListeAlbumsComponent,
-    UpdateAlbumsComponent,
-    LoginComponent,
-    ForbiddenComponent,
-    RegisterComponent,
-    VerifEmailComponent
+
+ 
 
   ],
   imports: [
@@ -50,18 +53,21 @@ import { VerifEmailComponent } from './verif-email/verif-email.component';
     HttpClientModule,
     BrowserAnimationsModule,
   
-    ToastrModule.forRoot(),
 
+    ToastrModule.forRoot(),
+    KeycloakAngularModule,
 
   ],
   providers: [
-    provideHttpClient(withFetch()),
-    provideClientHydration(),
+
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+      }
+      
+  
   ],
   bootstrap: [AppComponent]
 })

@@ -1,47 +1,51 @@
+<!DOCTYPE html>
+<html >
 <head>
-    <meta charset="utf-8">
-    <title>Gestion des Chansons</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="utf-8">
+<title>Gestion des chansons</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand" href="#">Gestion Chansons</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/chansons">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                    Chanson
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" *ngIf="authService.isAdmin()" routerLink="/add-chanson">Ajouter</a>
-                    <a class="dropdown-item" href="#">Lister</a>
-                    <a class="dropdown-item" routerLink="/rechercherParAlbum" >Recherche Par Album</a>
-                    <a class="dropdown-item" routerLink="/rechercheParTitre" >Recherche Par Titre</a>
-                    <a class="dropdown-item" routerLink="/listeAlbums" >Gestion des Albums</a>
-                </div>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-        <li> <a class="nav-link">{{authService.loggedUser}}</a></li>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Gestion chansons</a>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                    Connexion
-                </a>
-                <div class="dropdown-menu">
-                    <a *ngIf="!authService.isloggedIn" class="dropdown-item" routerLink = "login">login</a>
-                    <a *ngIf="authService.isloggedIn" class="dropdown-item" (click) = "onLogout()" >logout</a>
-                    <a class="dropdown-item" href="#">Profile</a>
-                </div>
-            </li>
-        </ul>
-    </nav>
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link"   routerLink="/chansons" >Home</a>
+    </li>
 
-    <router-outlet></router-outlet>
+    <!-- Dropdown -->
+    <li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        chansons
+      </a>
+      <div class="dropdown-menu">
+       
+        <a class="dropdown-item"  routerLink="/chansons"     *ngIf="keycloakService.getUserRoles().includes('ADMIN')"            >Lister</a>      
+      </div>
+    </li>
+    </ul>
+    
+    <ul class="navbar-nav ml-auto" > 
+     <li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+  <span *ngIf="profile; else NOT_LOGGED_IN">
+    {{profile.username}}
+  </span>
+  <ng-template #NOT_LOGGED_IN>
+    <button class="btn btn-success" (click)="onLogin()">Login</button>
+  </ng-template>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      </a>
+      <div class="dropdown-menu">
+       <!--  <a class="dropdown-item"   (click)="login()"> login</a>      -->  
+        <a class="dropdown-item" (click)="onLogout()">logout</a>
+          <a class="dropdown-item" href="#">Profile</a>
+      </div>
+    </li>
+  </ul>
+</nav>
 </body>
+</html>
+<router-outlet></router-outlet>

@@ -10,9 +10,8 @@
             <th>id</th>
             <th>Nom</th>
             <th>Durée</th>
-            <th>Album</th>
-             <th>Image</th>
-            <th *ngIf="authService.isAdmin()">Actions</th>
+           
+           
           </tr>
         </thead>
         <tbody>
@@ -20,23 +19,8 @@
             <td>{{chanson.idChanson}}</td>
             <td>{{chanson.titreChanson}}</td>
             <td>{{chanson.dureeChanson}}</td>
-               <td>{{chanson.album?.titreAlbum}}</td>
-            <td>
-  <img 
-
-  src="{{apiurl+'/image/loadfromFS/'+chanson.idChanson}}"
- 
-    style="width: 80px; height: 100px" 
-   
-  />
-</td>
-
+              
     
-            <td>
-
-              <a *ngIf="authService.isAdmin()" class="btn btn-success" [routerLink]="['/updateChanson', chanson.idChanson]">Modifier</a>
-              <a *ngIf="authService.isAdmin()" class="btn btn-danger" (click)="supprimerChanson(chanson)">Supprimer</a>
-            </td>
           </tr>
         </tbody>
       </table> 
