@@ -109,25 +109,34 @@ export class ChansonService {
     return this.http.get<Image>(url);
     }
 
-     uploadImageChanson(file: File, filename: string, idChan:number): Observable<any>{
+    /* uploadImageChanson(file: File, filename: string, idChan:number): Observable<any>{
       
       const imageFormData = new FormData();
       imageFormData.append('image', file, filename);
       const url = `${this.apiURL + '/image/uploadImageChan'}/${idChan}`;
       return this.http.post(url, imageFormData);
-      } 
+      } */
       supprimerImage(id : number) {
         const url = `${this.apiURL}/image/delete/${id}`;
         return this.http.delete(url, httpOptions);
         }
-      
+        uploadImageChanson(file: File, filename: string, idChan: number): Observable<any> {
+          const imageFormData = new FormData();
+          imageFormData.append('image', file, filename);
+          const url = `${this.apiURL + '/image/uploadImageChan'}/${idChan}`;
+          return this.http.post(url, imageFormData);
+        }
+        
 
-      uploadImageFS(file: File, filename: string, idChanson : number): Observable<any>{
+      /*uploadImageFS(file: File, filename: string, idChanson : number): Observable<any>{
         const imageFormData = new FormData();
         imageFormData.append('image', file, filename);
         const url = `${apiURL + '/image/uploadFS'}/${idChanson}`;
         return this.http.post(url, imageFormData);
-      }
-
+      }*/
+        getImagesForIngredient(idIng: number): Observable<Image[]> {
+          const url = `${apiURL}/image/uploadImageChan/${idIng}`;
+          return this.http.get<Image[]>(url);
+        }
      
 }

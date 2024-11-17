@@ -102,7 +102,7 @@ ngOnInit(): void {
       onAddImageChanson() {
         console.log("Current Chanson ID:", this.currentChanson?.idChanson);
 
-        if (this.currentChanson?.idChanson !== undefined) {
+        if (this.currentChanson.idChanson !== undefined) {
             this.chansonService
                 .uploadImageChanson(this.uploadedImage, this.uploadedImage.name, this.currentChanson.idChanson)
                 .subscribe((img: Image) => {

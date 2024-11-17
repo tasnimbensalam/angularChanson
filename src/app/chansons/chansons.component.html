@@ -21,15 +21,14 @@
             <td>{{chanson.titreChanson}}</td>
             <td>{{chanson.dureeChanson}}</td>
                <td>{{chanson.album?.titreAlbum}}</td>
-            <td>
-  <img 
+              
+    <td>
+              <img *ngIf="chanson.imageStr"
+                   [src]="chanson.imageStr"
+                   class="card-img-top img-responsive"
+                   style="height:150px;width:150px" />
+            </td>
 
-  src="{{apiurl+'/image/loadfromFS/'+chanson.idChanson}}"
- 
-    style="width: 80px; height: 100px" 
-   
-  />
-</td>
 
     
             <td>

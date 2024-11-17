@@ -4,7 +4,8 @@ import { ChansonService } from '../services/chanson.service';
 import { Album } from '../model/album.model';
 import { Router } from '@angular/router';
 import { Image } from '../model/image.model';
-
+import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-add-chanson',
   templateUrl: './add-chanson.component.html',
@@ -37,7 +38,7 @@ export class AddChansonComponent implements OnInit {
   }
 
 
-    addChanson(){
+   /* addChanson(){
       this.newChanson.album = this.albums.find(cat => cat.idAlbum
       == this.newIdAlbum)!;
       this.chansonService
@@ -50,8 +51,54 @@ export class AddChansonComponent implements OnInit {
       );
       this.router.navigate(['chansons']);
       });
-      }
-  
+      }*/
+    /*  addChanson(){
+        this.chansonService
+        .uploadImage(this.uploadedImage, this.uploadedImage.name)
+        .subscribe((img: Image) => {
+        this.newChanson.image=img;
+        this.newChanson.album = this.albums.find(cat => cat.idAlbum
+        == this.newIdAlbum)!;
+        this.chansonService
+        .ajouterChanson(this.newChanson)
+        .subscribe(() => {
+        this.router.navigate(['chansons']);
+        });
+        });
+        }*/
+        addChanson() {
+          // Créer la chanson sans l'image
+          this.newChanson.album = this.albums.find(cat => cat.idAlbum
+            == this.newIdAlbum)!;
+          this.chansonService.ajouterChanson(this.newChanson).subscribe((createdChanson) => {
+            // Une fois la chanson créée, récupérer son ID
+            if (this.uploadedImage) {
+              // Associer l'image à la chanson
+              this.chansonService
+                .uploadImageChanson(this.uploadedImage, this.uploadedImage.name, createdChanson.idChanson!)
+                .subscribe(() => {
+                  // Redirection après succès
+                  this.router.navigate(['chansons']);
+                });
+            } else {
+              // Pas d'image à associer, redirection directe
+              this.router.navigate(['chansons']);
+            }
+          });
+        }
+       /* addChanson() {
+          this.chansonService
+            .uploadImage(this.uploadedImage, this.uploadedImage.name)
+            .subscribe((img: Image) => {
+              this.newChanson.image = img;
+              this.newChanson.album = this.albums.find(gen => gen.idAlbum== this.newIdAlbum)!;
+              this.chansonService
+                .ajouterChanson(this.newChanson)
+                .subscribe(() => {
+                  this.router.navigate(['chansons']);
+                });
+            });*/
+          
   onImageUpload(event: any) {
     this.uploadedImage = event.target.files[0];
     var reader = new FileReader();

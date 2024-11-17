@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Chanson } from '../model/chanson.model';
 import { ChansonService } from '../services/chanson.service';
 import { Image } from '../model/image.model';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-chansons',
@@ -12,8 +13,9 @@ import { Image } from '../model/image.model';
 
 export class ChansonsComponent {
   apiurl:string='http://localhost:8080/chansons/api';
-    chansons! : Chanson[]; 
-    constructor(private chansonService: ChansonService ,public authService:AuthService) {
+    chansons! : Chanson[];
+    isImageLoading: { [key: number]: boolean } = {}; 
+    constructor(private chansonService: ChansonService ,public authService:AuthService,private cd: ChangeDetectorRef) {
      // this.chansons = this.chansonService.listeChansons(); 
       }
       ngOnInit(): void {
@@ -37,18 +39,41 @@ supprimerChanson(chans: Chanson): void {
     console.error('idChanson is undefined or null');
   }
 }
-chargerChansons(){
+/*chargerChansons(){
   this.chansonService.listeChansons().subscribe(prods => {
   this.chansons = prods;
   });
-  }
+  }*/
   
 /*chargerChansons(){
-  this.chansonService.listeChansons().subscribe(prods=> {
-  this.chansons=  prods  ;
-  this.chansons.forEach(( prod ) => {
-     prod.imageStr = 'data:' +  prod.images[0].type + ';base64,' +  prod.images[0].image;
+  this.chansonService.listeChansons().subscribe(chans=> {
+    console.log(chans); 
+  this.chansons=  chans  ;
+  this.chansons.forEach(( chan ) => {
+     chan.imageStr = 'data:' +  chan.images[0].type + ';base64,' +  chan.images[0].image;
+     
     });
-  });  */    }
-
+  });  
+    }*/
+    chargerChansons(): void {
+      this.chansonService.listeChansons().subscribe(chansons => {
+        this.chansons = chansons;
+  
+        // Fetch image for each Chanson
+        this.chansons?.forEach(chanson => {
+          if (chanson.idChanson) {
+            this.chansonService.getImagesForIngredient(chanson.idChanson).subscribe((img: Image[]) => {
+              // Check if an image is available
+              if (img.length > 0) {
+                chanson.imageStr = 'data:' + img[0].type + ';base64,' + img[0].image;
+              } else {
+                chanson.imageStr = ''; // Initialize with empty string if no image
+                console.log(`No image found for Chanson ${chanson.titreChanson}`);
+              }
+            });
+          }
+        });
+      });
+    }
+}
 
